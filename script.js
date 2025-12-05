@@ -5,7 +5,7 @@ async function loadEvents() {
     // fas fa-clock pronto
     // fas fa-circle en vivo
 
-    const response = await fetch(`/agendas.json?nocache=${Date.now()}`); /* ACA SE CAMBIA REVISE SU CODIGO ORIGINAL /json/agenda123.json */
+    const response = await fetch(`https://streamvv33.lat/json/agenda123.json?nocache=${Date.now()}`); /* ACA SE CAMBIA REVISE SU CODIGO ORIGINAL /json/agenda123.json */
     const events = await response.json();
 
     events.forEach(event => {
