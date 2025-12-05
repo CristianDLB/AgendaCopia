@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda Copia</title>
+
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/1536/1536120.png" type="image/png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script type="text/javascript"
+        src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=MGkuoS05W4HWEF_IbzKWxcY4j91gcoNZUwiaOJikjgjdnG2WNfWA4-2uv-tlAaj4"
+        charset="UTF-8"></script>
+    <style>
+        :root {
+            --color-bg: #1c1c28;
+            --color-text: #e0e0f0;
+            --color-primary: #007bff;
+            --color-secondary: #ff9800;
+            --shadow-light: rgba(255, 255, 255, 0.03);
+            --shadow-dark: rgba(0, 0, 0, 0.4);
+            --color-surface: #262638;
+        }
+
+        body {
+            margin: 0;
+            padding-top: 70px;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container {
+            flex: 1;
+            width: 95%;
+            max-width: 8100px;
+            padding: 20px;
+            background-color: var(--color-surface);
+            border-radius: 12px;
+            box-shadow: 10px 10px 30px var(--shadow-dark), -10px -10px 30px var(--shadow-light);
+            margin: 20px auto;
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: var(--color-text);
+            font-size: 30px;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .input-search {
+            width: 100%;
+            padding: 12px 15px 12px 40px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-size: 16px;
+            box-shadow: inset 2px 2px 5px var(--shadow-dark), inset -2px -2px 5px var(--shadow-light);
+            box-sizing: border-box;
+            transition: background-color 0.3s;
+        }
+
+
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .category {
+            padding: 10px 20px;
+            background-color: #333333;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .category.active {
+            background-color: #5d5d5d;
+            transform: scale(1.05);
+        }
+
+        .category:hover {
+            background-color: #ff9800;
+        }
+
+        .event {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--color-surface);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s;
+        }
+
+        .event:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .event-name {
+            font-size: 16px;
+            color: #ffffff;
+            margin: 0;
+            /* flex: 1; */
+            width: 80%;
+        }
+
+        .copy-button {
+            padding: 8px 12px;
+            background-color: var(--color-secondary);
+            color: #1c1c28;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: bold;
+
+        }
+
+        .copy-button:hover {
+            background-color: #ff5722;
+        }
+
+        .copy-button:active {
+            background-color: #252525;
+        }
+
+        .status-button {
+            padding: 6px 20px;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            width: 110px;
+
+        }
+
+        .status-live {
+            background-color: red;
+        }
+
+        .status-next {
+            background-color: blue;
+        }
+
+        .status-finished {
+            background-color: black;
+        }
+
+        #notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #252525;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s, transform 0.5s;
+        }
+
+        .footer {
+            background-color: #121212;
+            color: #888;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 14px;
+        }
+
+        .update-text {
+            color: #18d763;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .open-link-icon {
+            font-size: 15px;
+            color: #007bff;
+            margin-left: auto;
+            /* lo empuja a la derecha */
+            padding: 6px;
+            transition: color 0.2s ease;
+        }
+
+        .open-link-icon:hover {
+            color: #0056b3;
+        }
+
+        .open-in-new-tab-icon {
+            font-size: 8px;
+            color: #007bff;
+            margin-left: 8px;
+            cursor: pointer;
+        }
+
+        .open-in-new-tab-icon:hover {
+            color: #0056b3;
+        }
+
+        .buttons_container {
+            display: flex;
+            gap: 5px;
+
+        }
+
+        .iframe-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+            width: 100%;
+        }
+
+        .iframe-link {
+            width: 500px;
+            padding: 8px;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 14px;
+
+        }
+
+        .open-link-icon {
+            font-size: 1.2rem;
+            color: #007bff;
+            padding: 6px;
+            transition: color 0.2s ease;
+        }
+
+        .open-link-icon:hover {
+            color: #0056b3;
+        }
+
+        #hora {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .language_text {
+            color: #dad8d8;
+            font-size: 12px;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+
+        @media (max-width: 768px) {
+            .event {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .event-name {
+                width: 100%;
+            }
+
+            .iframe-container {
+                width: 100%;
+            }
+
+            .iframe-link {
+                width: 100%;
+                margin-top: 10px;
+                margin-left: 0;
+            }
+
+            .copy-button {
+                margin-top: 10px;
+                margin-left: 0;
+            }
+
+            .status-button {
+
+
+                margin-top: 10px;
+                margin-left: 0;
+            }
+
+            .buttons_container {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+            }
+
+            .input-search {
+                width: 100%;
+            }
+
+            .language_text {
+                display: none;
+            }
+
+            .open-in-new-tab-icon {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .iframe-link {
+                width: 100%;
+                font-size: 12px;
+            }
+
+            .header {
+                padding: 0 10px;
+                height: 55px;
+            }
+
+            .header .logo {
+                flex-shrink: 0;
+            }
+
+            #header-logo-img {
+                height: 40px;
+            }
+
+            .header nav {
+                gap: 5px;
+            }
+
+            .header .nav-btn {
+                padding: 6px 10px;
+                font-size: 11px;
+                white-space: nowrap;
+                border-radius: 4px;
+            }
+        }
+
+        /*NUEVO CSS*/
+        .nav-button-style {
+            padding: 10px 15px;
+            background-color: #ff001f;
+            color: var(--color-text);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 3px 3px 8px var(--shadow-dark);
+            transition: all 0.2s;
+            font-weight: bold;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+        }
+
+        .nav-button-style:hover {
+            background-color: #0056b3;
+            transform: translateY(-1px);
+        }
+
+        .header nav {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .header {
+            background-color: #1c1c28;
+            color: #ffffff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            box-sizing: border-box;
+        }
+
+        .header .logo {
+            font-size: 1.8em;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+
+        .header .nav-btn {
+            background-color: #00bcd4;
+            color: #121212;
+            padding: 10px 18px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .header .nav-btn:hover {
+            background-color: #0097a7;
+        }
+
+        #header-logo-img {
+
+            height: 45px;
+            width: auto;
+            display: block;
+        }
+
+        .header .logo {
+            font-size: unset;
+            font-weight: unset;
+            letter-spacing: unset;
+            margin: 0;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <a href="/" class="logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/1536/1536120.png" alt="Logo Streamvv33"
+                id="header-logo-img">
+        </a>
+        <nav>
+            <a href="#" class="nav-btn">Eventos 1</a>
+            <a href="#" class="nav-btn">Eventos 2</a>
+        </nav>
+    </div>
+
+    <div class="container">
+        <h1 id="title">Eventos Deportivos | Sports Events</h1>
+        <center>
+            <div id="hora"></div>
+            <script>
+                function actualizarHora() {
+                    const ahora = new Date();
+                    // Mostrar hora adaptada al usuario
+                    const opciones = {
+                        weekday: "long",  // día de la semana
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit",
+                        timeZoneName: "short" // muestra abreviatura de la zona horaria
+                    };
+                    const horaLocal = ahora.toLocaleString(undefined, opciones);
+                    document.getElementById("hora").textContent = horaLocal;
+                }
+                // Actualiza cada segundo
+                setInterval(actualizarHora, 1000);
+                actualizarHora();
+            </script>
+        </center>
+        <p class="update-text">
+            Transmisiones.
+            <img src="https://flagcdn.com/es.svg" alt="Español" title="Español" style="width: 20px; height: 15px;">
+            <img src="https://flagcdn.com/us.svg" alt="Inglés" title="Inglés" style="width: 20px; height: 15px;">
+            <img src="https://flagcdn.com/br.svg" alt="Portugués" title="Portugués" style="width: 20px; height: 15px;">
+        </p>
+
+        <div class="search-container">
+            <input type="text" id="search" class="input-search" placeholder="Buscar eventos...">
+            <i class="fas fa-search search-icon"></i>
+        </div>
+        <!--  <div class="categories" id="categories-container"></div> -->
+        <div id="events-container" class="events-container"></div>
+    </div>
+    <div class="footer">
+        <p>......</p>
+    </div>
+    <div id="notification">Enlace copiado</div>
+    <!-- LUXON -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/3.4.4/luxon.min.js"></script>
+
+    <script src="/script.js"></script>
+    <script defer
+        src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015"
+        integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ=="
+        data-cf-beacon='{"version":"2024.11.0","token":"271a06806d7843d09575bb1930bac47e","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}'
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
